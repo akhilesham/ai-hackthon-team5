@@ -4,7 +4,12 @@ from langchain_core.messages import HumanMessage, SystemMessage
 import httpx
 import re
 import base64
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from modules.prompts import SYSTEM_BASE_PROMPT
+
 
 client = httpx.Client(verify=False)
 

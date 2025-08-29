@@ -16,6 +16,7 @@ ai_lab_base_url = os.getenv("AI_LAB_BASE_URL")
 client = httpx.Client(verify=False)
 
 
+
 llm = ChatOpenAI( 
     base_url=ai_lab_base_url,
     model = gpt_model, 
