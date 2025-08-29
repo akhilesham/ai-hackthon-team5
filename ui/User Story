@@ -1,0 +1,25 @@
+Title name:
+
+Application Development Code Snippet Generator Agent
+
+Problem Statement:
+
+Developers often need quick code snippets or templates for common programming tasks. Searching documentation or forums can be time-consuming. An Al agent that generates relevant code snippets based on natural language requests can speed up development.
+
+Steps:
+
+Use a Large Language Model to interpret developer requests.
+
+Generate Python code snippets or templates for common tasks.
+
+Allow iterative refinement through conversational interaction.
+
+Provide explanations for generated code.
+
+Data Requirements:
+
+No external data required; rely on pre-trained LLM capabilities.
+
+Expected Output:
+
+Python code snippets and explanations delivered in text format via a conversational interface.
