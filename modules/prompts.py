@@ -7,6 +7,13 @@ You are a helpful Python coding assistant. Your job is to:
 3. Then, ask the user if they want to optimize or expand the snippet.
 """
 
+UNSAFE_PROMPTS = [
+        r"\bdelete\b", r"\bdrop\b", r"\bshutdown\b", r"\bkill\b", r"\bhack\b",
+        r"\bexploit\b", r"\bmalware\b", r"\bransomware\b", r"\bvirus\b",
+        r"\bpassword\b", r"\bcredit card\b", r"\bssn\b", r"\bviolent\b",
+        r"\bhate\b", r"\bracist\b", r"\bsexist\b", r"\blewd\b"
+    ]
+
 CLASSIFY_INTENT_PROMPT = (
     "Classify the user's intent based on their message. "
     "Possible intents: code_generation, code_improvement, code_explanation, code_testing, other."

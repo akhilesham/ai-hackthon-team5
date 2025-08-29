@@ -8,17 +8,35 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from modules.prompts import SYSTEM_BASE_PROMPT
+from modules.prompts import SYSTEM_BASE_PROMPT, UNSAFE_PROMPTS
 
 
 client = httpx.Client(verify=False)
 
+from dotenv import load_dotenv
+# Create Client for proxy
+load_dotenv()
+api_key = os.getenv("API_KEY")
+gpt_model = os.getenv("GPT_MODEL")
+ai_lab_base_url = os.getenv("AI_LAB_BASE_URL")
+
+
 llm = ChatOpenAI(
-    base_url="https://genailab.tcs.in",
-    model="azure/genailab-maas-gpt-4o-mini",
-    api_key="sk-VHkpB_vIIyA1_9lWH3bt1w",
-    http_client=client
+    base_url=ai_lab_base_url,
+    model = gpt_model, 
+    api_key=api_key, 
+    http_client = client 
 )
+
+# Guard rail: Filter out potentially harmful or inappropriate user inputs
+def is_safe_input(text):
+    unsafe_patterns = UNSAFE_PROMPTS
+    for pattern in unsafe_patterns:
+        if re.search(pattern, text, re.IGNORECASE):
+            return False
+    return True
+
+
 system_prompt = SYSTEM_BASE_PROMPT
 
 if "messages" not in st.session_state:
@@ -72,12 +90,14 @@ def rerun_app():
 
 if st.button("Send", on_click=rerun_app) and user_input:
     # Append user message
-    st.session_state.messages.append(HumanMessage(content=user_input))
+    if(is_safe_input(user_input)):
+        st.session_state.messages.append(HumanMessage(content=user_input))
 
-    # Call LLM with full conversation history
-    response = llm(st.session_state.messages)
-    st.session_state.messages.append(response)
+        # Call LLM with full conversation history
+        response = llm(st.session_state.messages)
+        st.session_state.messages.append(response)
+    else:
+        from langchain_core.messages import SystemMessage
+        st.session_state.messages.append(SystemMessage(content="The Prompt has vulnerable asks, please refine."))
 
-    # Rerun to show updated chat
-    # if st.session_state['rerun']:
     st.rerun()
