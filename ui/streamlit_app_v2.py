@@ -64,7 +64,13 @@ st.markdown("---")
 st.subheader("Your Message")
 user_input = st.text_input("Enter your message here:")
 
-if st.button("Send") and user_input:
+if 'rerun' not in st.session_state:
+    st.session_state['rerun'] = False
+
+def rerun_app():
+    st.session_state['rerun'] = not st.session_state['rerun']
+
+if st.button("Send", on_click=rerun_app) and user_input:
     # Append user message
     st.session_state.messages.append(HumanMessage(content=user_input))
 
@@ -73,4 +79,5 @@ if st.button("Send") and user_input:
     st.session_state.messages.append(response)
 
     # Rerun to show updated chat
-    st.experimental_rerun()
+    # if st.session_state['rerun']:
+    st.rerun()
